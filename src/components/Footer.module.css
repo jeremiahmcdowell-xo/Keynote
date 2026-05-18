@@ -1,32 +1,29 @@
 .footer {
-  padding: 32px 40px;
+  padding: 28px 0;
   border-top: 1px solid var(--divider);
   position: relative;
   z-index: 1;
 }
 
 .inner {
-  max-width: 1100px;
-  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .left {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
 .logo {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 13.5px;
+  font-weight: 700;
   color: var(--text-primary);
-  letter-spacing: -0.2px;
+  letter-spacing: -0.3px;
 }
 
 .at {
@@ -34,29 +31,37 @@
 }
 
 .copy {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.right {
   display: flex;
-  gap: 20px;
-}
-
-.socialLink {
+  align-items: center;
+  gap: 5px;
   font-size: 12px;
-  font-weight: 500;
   color: var(--text-muted);
+}
+
+.heart {
+  color: #f87171;
+}
+
+.socials {
+  display: flex;
+  gap: 6px;
+}
+
+.socialBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-decoration: none;
-  transition: color 0.2s;
+  transition: background 0.15s, color 0.15s;
 }
 
-.socialLink:hover {
+.socialBtn:hover {
+  background: var(--glass-bg-hover);
   color: var(--accent);
-}
-
-@media (max-width: 480px) {
-  .footer {
-    padding: 28px 24px;
-  }
 }

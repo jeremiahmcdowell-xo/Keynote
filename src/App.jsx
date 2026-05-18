@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
+import CursorGlow from './components/CursorGlow'
 import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import Work from './components/Work'
+import Home from './components/Home'
 import About from './components/About'
-import Contact from './components/Contact'
+import Vision from './components/Vision'
+import Certifications from './components/Certifications'
+import Projects from './components/Projects'
 import Footer from './components/Footer'
 
 export default function App() {
@@ -22,12 +24,14 @@ export default function App() {
 
   return (
     <>
+      <CursorGlow />
       <Navbar theme={theme} toggleTheme={toggleTheme} />
       <main style={{ position: 'relative', zIndex: 1 }}>
-        <Hero />
-        <Work />
+        <Home />
         <About />
-        <Contact />
+        <Vision />
+        <Certifications />
+        <Projects />
       </main>
       <Footer />
     </>

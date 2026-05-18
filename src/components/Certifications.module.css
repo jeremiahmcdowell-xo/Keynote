@@ -1,0 +1,152 @@
+.section {
+  padding: 110px 0;
+}
+
+.label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: var(--accent);
+  padding: 4px 11px;
+  border-radius: 7px;
+  background: var(--accent-soft);
+  margin-bottom: 44px;
+}
+
+.header {
+  margin-bottom: 40px;
+}
+
+.title {
+  font-size: clamp(26px, 3.5vw, 40px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.certCard {
+  padding: 24px 22px;
+  border-radius: 16px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  transition: background 0.2s, box-shadow 0.2s;
+  cursor: default;
+}
+
+.certCard:hover {
+  background: var(--glass-bg-hover);
+  box-shadow: var(--glass-shadow-hover);
+}
+
+.pending {
+  border-style: dashed;
+  opacity: 0.7;
+}
+
+.certTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.certIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.certLink {
+  color: var(--text-muted);
+  transition: color 0.15s;
+  display: flex;
+}
+
+.certLink:hover { color: var(--accent); }
+
+.certName {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 5px;
+  letter-spacing: -0.2px;
+}
+
+.certIssuer {
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.certDate {
+  font-size: 11.5px;
+  color: var(--accent);
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+/* Upcoming */
+.upcoming {
+  padding: 22px 24px;
+  border-radius: 14px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+}
+
+.upcomingTitle {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.upcomingList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.upcomingItem {
+  padding: 5px 13px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 500;
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  border: 1px solid var(--glass-border);
+}
+
+@media (max-width: 760px) {
+  .section { padding: 80px 0; }
+  .grid { grid-template-columns: 1fr; }
+}
