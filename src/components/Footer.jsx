@@ -2,7 +2,7 @@ import { FaGithub, FaTwitter, FaLinkedin, FaHeart } from 'react-icons/fa'
 import styles from './Footer.module.css'
 
 const socials = [
-  { icon: <FaGithub size={15} />, href: 'https://github.com', label: 'GitHub' },
+  { icon: <FaGithub size={15} />, href: 'https://github.com/KpnWorld', label: 'GitHub' },
   { icon: <FaTwitter size={15} />, href: 'https://twitter.com', label: 'Twitter' },
   { icon: <FaLinkedin size={15} />, href: 'https://linkedin.com', label: 'LinkedIn' },
 ]

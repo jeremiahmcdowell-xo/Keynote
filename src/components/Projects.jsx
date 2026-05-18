@@ -1,36 +1,81 @@
 import { motion } from 'framer-motion'
-import { FaGithub, FaExternalLinkAlt, FaStar } from 'react-icons/fa'
+import { FaGithub, FaExternalLinkAlt, FaPython, FaJs, FaDiscord } from 'react-icons/fa'
 import styles from './Projects.module.css'
+
+const langIcon = {
+  Python: <FaPython size={12} />,
+  JavaScript: <FaJs size={12} />,
+}
+
+const langColor = {
+  Python: '#3572A5',
+  JavaScript: '#f1e05a',
+}
 
 const projects = [
   {
-    name: 'Project Alpha',
-    desc: 'An open-source tool built to solve a real problem. Details and assets uploading soon.',
-    tags: ['Open Source', 'React', 'Node.js'],
-    stars: null,
-    status: 'In Progress',
-    github: 'https://github.com',
+    name: 'Pushie',
+    desc: 'A Python project in active development. Repo is live on GitHub.',
+    tags: ['Python', 'Open Source'],
+    language: 'Python',
+    github: 'https://github.com/KpnWorld/Pushie',
     live: null,
+    status: 'Active',
   },
   {
-    name: 'Project Beta',
-    desc: 'Open-source utility for developers. Repo and demo going live soon.',
-    tags: ['TypeScript', 'API', 'Open Source'],
-    stars: null,
-    status: 'In Progress',
-    github: 'https://github.com',
-    live: null,
+    name: 'Pawn',
+    desc: 'Python project with a live deployment on Vercel.',
+    tags: ['Python', 'Open Source'],
+    language: 'Python',
+    github: 'https://github.com/KpnWorld/Pawn',
+    live: 'https://pawn-sand.vercel.app',
+    status: 'Active',
   },
   {
-    name: 'Project Gamma',
-    desc: 'A community tool currently in development. Stay tuned.',
-    tags: ['Web App', 'Design', 'Community'],
-    stars: null,
-    status: 'Planning',
-    github: null,
+    name: 'MusubiB',
+    desc: 'Discord bot project. Join the community server to try it out.',
+    tags: ['Discord Bot', 'Open Source'],
+    language: null,
+    github: 'https://github.com/KpnWorld/MusubiB',
+    live: 'https://discord.gg/ZMEq3QbSCY',
+    status: 'Active',
+    liveLabel: 'Discord',
+    liveIcon: <FaDiscord size={12} />,
+  },
+  {
+    name: 'EB-Tutorial',
+    desc: 'A step-by-step guide to building the basics of a good Discord Economy Bot.',
+    tags: ['Python', 'Tutorial', 'Discord'],
+    language: 'Python',
+    github: 'https://github.com/KpnWorld/EB-Tutorial',
     live: null,
+    status: 'Complete',
+  },
+  {
+    name: 'EB-Production',
+    desc: 'Production-ready Discord Economy Bot built in Python.',
+    tags: ['Python', 'Discord Bot', 'Open Source'],
+    language: 'Python',
+    github: 'https://github.com/KpnWorld/EB-Production',
+    live: null,
+    status: 'Complete',
+  },
+  {
+    name: 'dimex',
+    desc: 'New project currently in early development.',
+    tags: ['Open Source'],
+    language: null,
+    github: 'https://github.com/KpnWorld/dimex',
+    live: null,
+    status: 'In Progress',
   },
 ]
+
+const statusStyle = {
+  Active: styles.statusActive,
+  Complete: styles.statusComplete,
+  'In Progress': styles.statusProgress,
+}
 
 export default function Projects() {
   return (
@@ -55,13 +100,12 @@ export default function Projects() {
           >
             <h2 className={styles.title}>Things I'm Building</h2>
             <p className={styles.subtitle}>
-              Real projects, all open source. Assets and details uploading soon —
-              check back or follow on GitHub.
+              Open-source work live on GitHub. Discord bots, Python tools, and more.
             </p>
           </motion.div>
 
           <motion.a
-            href="https://github.com"
+            href="https://github.com/KpnWorld"
             target="_blank"
             rel="noreferrer"
             className={styles.githubLink}
@@ -70,7 +114,7 @@ export default function Projects() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <FaGithub size={14} /> View all on GitHub
+            <FaGithub size={14} /> @KpnWorld
           </motion.a>
         </div>
 
@@ -79,7 +123,7 @@ export default function Projects() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: '-60px' }}
-          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.09 } } }}
+          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
         >
           {projects.map(p => (
             <motion.div
@@ -92,21 +136,18 @@ export default function Projects() {
               whileHover={{ y: -5 }}
             >
               <div className={styles.cardTop}>
-                <span className={`${styles.status} ${p.status === 'Planning' ? styles.statusPlanning : styles.statusProgress}`}>
+                <span className={`${styles.status} ${statusStyle[p.status]}`}>
                   {p.status}
                 </span>
                 <div className={styles.cardLinks}>
-                  {p.stars !== null && (
-                    <span className={styles.stars}><FaStar size={11} /> {p.stars}</span>
-                  )}
                   {p.github && (
                     <a href={p.github} target="_blank" rel="noreferrer" className={styles.iconLink} aria-label="GitHub">
                       <FaGithub size={14} />
                     </a>
                   )}
                   {p.live && (
-                    <a href={p.live} target="_blank" rel="noreferrer" className={styles.iconLink} aria-label="Live demo">
-                      <FaExternalLinkAlt size={12} />
+                    <a href={p.live} target="_blank" rel="noreferrer" className={styles.iconLink} aria-label={p.liveLabel || 'Live site'}>
+                      {p.liveIcon || <FaExternalLinkAlt size={12} />}
                     </a>
                   )}
                 </div>
@@ -115,27 +156,37 @@ export default function Projects() {
               <h3 className={styles.cardName}>{p.name}</h3>
               <p className={styles.cardDesc}>{p.desc}</p>
 
-              <div className={styles.tags}>
-                {p.tags.map(t => (
-                  <span key={t} className={styles.tag}>{t}</span>
-                ))}
+              <div className={styles.cardBottom}>
+                <div className={styles.tags}>
+                  {p.tags.map(t => (
+                    <span key={t} className={styles.tag}>{t}</span>
+                  ))}
+                </div>
+                {p.language && (
+                  <div className={styles.lang}>
+                    <span className={styles.langDot} style={{ background: langColor[p.language] }} />
+                    {p.language}
+                  </div>
+                )}
               </div>
             </motion.div>
           ))}
         </motion.div>
 
-        <motion.div
+        <motion.a
+          href="https://github.com/KpnWorld"
+          target="_blank"
+          rel="noreferrer"
           className={styles.cta}
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.15 }}
         >
-          <span>More projects coming — assets uploading soon.</span>
-          <a href="https://github.com" target="_blank" rel="noreferrer" className={styles.ctaLink}>
-            <FaGithub size={13} /> Watch on GitHub
-          </a>
-        </motion.div>
+          <FaGithub size={15} />
+          <span>See everything on GitHub — <strong>github.com/KpnWorld</strong></span>
+          <FaExternalLinkAlt size={11} className={styles.ctaArrow} />
+        </motion.a>
       </div>
     </section>
   )

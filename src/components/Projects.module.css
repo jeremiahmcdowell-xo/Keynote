@@ -51,11 +51,11 @@
   border: 1px solid var(--glass-border);
   color: var(--text-secondary);
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
-  transition: background 0.15s, color 0.15s;
   flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
 }
 
 .githubLink:hover {
@@ -66,12 +66,12 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 14px;
+  margin-bottom: 16px;
 }
 
 .card {
-  padding: 26px 24px;
+  padding: 24px;
   border-radius: 18px;
   background: var(--glass-bg);
   backdrop-filter: blur(24px) saturate(180%);
@@ -80,7 +80,7 @@
   box-shadow: var(--glass-shadow);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   transition: background 0.2s, box-shadow 0.2s;
   cursor: default;
 }
@@ -105,17 +105,27 @@
   text-transform: uppercase;
 }
 
-.statusProgress {
-  background: rgba(99, 102, 241, 0.12);
+.statusActive {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+}
+
+[data-theme="dark"] .statusActive {
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.1);
+}
+
+.statusComplete {
+  background: rgba(99, 102, 241, 0.1);
   color: var(--accent);
 }
 
-.statusPlanning {
+.statusProgress {
   background: rgba(245, 158, 11, 0.1);
   color: #d97706;
 }
 
-[data-theme="dark"] .statusPlanning {
+[data-theme="dark"] .statusProgress {
   color: #fbbf24;
 }
 
@@ -125,19 +135,12 @@
   gap: 8px;
 }
 
-.stars {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
 .iconLink {
   color: var(--text-muted);
   display: flex;
+  align-items: center;
   transition: color 0.15s;
+  text-decoration: none;
 }
 
 .iconLink:hover { color: var(--accent); }
@@ -156,54 +159,83 @@
   flex: 1;
 }
 
+.cardBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+}
+
 .tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 5px;
 }
 
 .tag {
-  padding: 3px 10px;
-  border-radius: 7px;
+  padding: 3px 9px;
+  border-radius: 6px;
   font-size: 11px;
   font-weight: 500;
   background: var(--tag-bg);
   color: var(--tag-text);
 }
 
+.lang {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.langDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: block;
+}
+
 /* CTA */
 .cta {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 18px 24px;
+  gap: 10px;
+  padding: 16px 22px;
   border-radius: 14px;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.cta span {
-  font-size: 13.5px;
-  color: var(--text-muted);
-}
-
-.ctaLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--accent);
+  color: var(--text-secondary);
   text-decoration: none;
-  transition: opacity 0.15s;
+  font-size: 13.5px;
+  transition: background 0.15s, color 0.15s;
 }
 
-.ctaLink:hover { opacity: 0.75; }
+.cta:hover {
+  background: var(--glass-bg-hover);
+  color: var(--text-primary);
+}
+
+.cta strong {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.ctaArrow {
+  margin-left: auto;
+  opacity: 0.5;
+}
 
 @media (max-width: 820px) {
   .section { padding: 80px 0; }
-  .grid { grid-template-columns: 1fr; }
+  .grid { grid-template-columns: 1fr 1fr; }
   .header { align-items: flex-start; flex-direction: column; }
+}
+
+@media (max-width: 520px) {
+  .grid { grid-template-columns: 1fr; }
 }

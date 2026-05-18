@@ -47,7 +47,7 @@ export default function Home() {
               See my work <FaArrowRight size={12} />
             </button>
             <a
-              href="https://github.com"
+              href="https://github.com/KpnWorld"
               target="_blank"
               rel="noreferrer"
               className={styles.btnGhost}
