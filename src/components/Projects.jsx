@@ -1,83 +1,121 @@
-import { motion } from 'framer-motion'
-import { FaGithub, FaExternalLinkAlt, FaPython, FaJs, FaDiscord } from 'react-icons/fa'
+import { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { FaGithub, FaExternalLinkAlt, FaDiscord, FaStar, FaCodeBranch, FaCircle } from 'react-icons/fa'
 import styles from './Projects.module.css'
 
-const langIcon = {
-  Python: <FaPython size={12} />,
-  JavaScript: <FaJs size={12} />,
-}
+const GITHUB_USER = 'KpnWorld'
 
 const langColor = {
   Python: '#3572A5',
   JavaScript: '#f1e05a',
+  TypeScript: '#3178c6',
+  HTML: '#e34c26',
+  CSS: '#563d7c',
+  Shell: '#89e051',
 }
 
-const projects = [
-  {
-    name: 'Pushie',
-    desc: 'A Python project in active development. Repo is live on GitHub.',
-    tags: ['Python', 'Open Source'],
-    language: 'Python',
-    github: 'https://github.com/KpnWorld/Pushie',
-    live: null,
-    status: 'Active',
-  },
-  {
-    name: 'Pawn',
-    desc: 'Python project with a live deployment on Vercel.',
-    tags: ['Python', 'Open Source'],
-    language: 'Python',
-    github: 'https://github.com/KpnWorld/Pawn',
-    live: 'https://pawn-sand.vercel.app',
-    status: 'Active',
-  },
-  {
-    name: 'MusubiB',
-    desc: 'Discord bot project. Join the community server to try it out.',
-    tags: ['Discord Bot', 'Open Source'],
-    language: null,
-    github: 'https://github.com/KpnWorld/MusubiB',
-    live: 'https://discord.gg/ZMEq3QbSCY',
-    status: 'Active',
-    liveLabel: 'Discord',
-    liveIcon: <FaDiscord size={12} />,
-  },
-  {
-    name: 'EB-Tutorial',
-    desc: 'A step-by-step guide to building the basics of a good Discord Economy Bot.',
-    tags: ['Python', 'Tutorial', 'Discord'],
-    language: 'Python',
-    github: 'https://github.com/KpnWorld/EB-Tutorial',
-    live: null,
-    status: 'Complete',
-  },
-  {
-    name: 'EB-Production',
-    desc: 'Production-ready Discord Economy Bot built in Python.',
-    tags: ['Python', 'Discord Bot', 'Open Source'],
-    language: 'Python',
-    github: 'https://github.com/KpnWorld/EB-Production',
-    live: null,
-    status: 'Complete',
-  },
-  {
-    name: 'dimex',
-    desc: 'New project currently in early development.',
-    tags: ['Open Source'],
-    language: null,
-    github: 'https://github.com/KpnWorld/dimex',
-    live: null,
-    status: 'In Progress',
-  },
-]
+function RepoCard({ repo, index }) {
+  return (
+    <motion.a
+      href={repo.html_url}
+      target="_blank"
+      rel="noreferrer"
+      className={styles.card}
+      variants={{
+        hidden: { opacity: 0, y: 24 },
+        show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }
+      }}
+      whileHover={{ y: -5 }}
+    >
+      <div className={styles.cardTop}>
+        <div className={styles.repoName}>
+          <FaGithub size={13} className={styles.repoIcon} />
+          {repo.name}
+        </div>
+        <div className={styles.cardLinks}>
+          {repo.homepage && (
+            <span
+              className={styles.iconLink}
+              onClick={e => { e.preventDefault(); window.open(repo.homepage, '_blank') }}
+              title="Live site"
+            >
+              {repo.homepage.includes('discord') ? <FaDiscord size={13} /> : <FaExternalLinkAlt size={11} />}
+            </span>
+          )}
+        </div>
+      </div>
 
-const statusStyle = {
-  Active: styles.statusActive,
-  Complete: styles.statusComplete,
-  'In Progress': styles.statusProgress,
+      <p className={styles.cardDesc}>
+        {repo.description || 'No description yet.'}
+      </p>
+
+      <div className={styles.cardMeta}>
+        {repo.language && (
+          <span className={styles.lang}>
+            <FaCircle size={9} style={{ color: langColor[repo.language] || '#aaa' }} />
+            {repo.language}
+          </span>
+        )}
+        {repo.stargazers_count > 0 && (
+          <span className={styles.metaItem}>
+            <FaStar size={11} /> {repo.stargazers_count}
+          </span>
+        )}
+        {repo.forks_count > 0 && (
+          <span className={styles.metaItem}>
+            <FaCodeBranch size={11} /> {repo.forks_count}
+          </span>
+        )}
+        <span className={styles.updated}>
+          {timeAgo(repo.updated_at)}
+        </span>
+      </div>
+    </motion.a>
+  )
+}
+
+function SkeletonCard() {
+  return (
+    <div className={`${styles.card} ${styles.skeleton}`}>
+      <div className={`${styles.skelLine} ${styles.skelTitle}`} />
+      <div className={`${styles.skelLine} ${styles.skelDesc}`} />
+      <div className={`${styles.skelLine} ${styles.skelDesc} ${styles.skelShort}`} />
+      <div className={`${styles.skelLine} ${styles.skelMeta}`} />
+    </div>
+  )
+}
+
+function timeAgo(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime()
+  const days = Math.floor(diff / 86400000)
+  if (days < 1) return 'Today'
+  if (days < 7) return `${days}d ago`
+  if (days < 30) return `${Math.floor(days / 7)}w ago`
+  if (days < 365) return `${Math.floor(days / 30)}mo ago`
+  return `${Math.floor(days / 365)}y ago`
 }
 
 export default function Projects() {
+  const [repos, setRepos] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+
+  useEffect(() => {
+    fetch(`https://api.github.com/users/${GITHUB_USER}/repos?sort=updated&per_page=30&type=public`)
+      .then(r => r.json())
+      .then(data => {
+        const filtered = data
+          .filter(r => !r.fork && !r.archived)
+          .slice(0, 9)
+        setRepos(filtered)
+        setLoading(false)
+      })
+      .catch(() => {
+        setError(true)
+        setLoading(false)
+      })
+  }, [])
+
   return (
     <section className={styles.section} id="projects">
       <div className="section-inner">
@@ -100,12 +138,12 @@ export default function Projects() {
           >
             <h2 className={styles.title}>Things I'm Building</h2>
             <p className={styles.subtitle}>
-              Open-source work live on GitHub. Discord bots, Python tools, and more.
+              Live from GitHub — public repos, updated in real time.
             </p>
           </motion.div>
 
           <motion.a
-            href="https://github.com/KpnWorld"
+            href={`https://github.com/${GITHUB_USER}`}
             target="_blank"
             rel="noreferrer"
             className={styles.githubLink}
@@ -114,79 +152,53 @@ export default function Projects() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <FaGithub size={14} /> @KpnWorld
+            <FaGithub size={14} /> @{GITHUB_USER}
           </motion.a>
         </div>
 
+        {error ? (
+          <div className={styles.errorState}>
+            Couldn't load repos right now. <a href={`https://github.com/${GITHUB_USER}`} target="_blank" rel="noreferrer">View on GitHub →</a>
+          </div>
+        ) : loading ? (
+          <div className={styles.grid}>
+            {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
+          </div>
+        ) : (
+          <motion.div
+            className={styles.grid}
+            initial="hidden"
+            animate="show"
+            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.07 } } }}
+          >
+            {repos.map((repo, i) => (
+              <RepoCard key={repo.id} repo={repo} index={i} />
+            ))}
+          </motion.div>
+        )}
+
+        {/* Contribution graph */}
         <motion.div
-          className={styles.grid}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: '-60px' }}
-          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
-        >
-          {projects.map(p => (
-            <motion.div
-              key={p.name}
-              className={styles.card}
-              variants={{
-                hidden: { opacity: 0, y: 24 },
-                show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } }
-              }}
-              whileHover={{ y: -5 }}
-            >
-              <div className={styles.cardTop}>
-                <span className={`${styles.status} ${statusStyle[p.status]}`}>
-                  {p.status}
-                </span>
-                <div className={styles.cardLinks}>
-                  {p.github && (
-                    <a href={p.github} target="_blank" rel="noreferrer" className={styles.iconLink} aria-label="GitHub">
-                      <FaGithub size={14} />
-                    </a>
-                  )}
-                  {p.live && (
-                    <a href={p.live} target="_blank" rel="noreferrer" className={styles.iconLink} aria-label={p.liveLabel || 'Live site'}>
-                      {p.liveIcon || <FaExternalLinkAlt size={12} />}
-                    </a>
-                  )}
-                </div>
-              </div>
-
-              <h3 className={styles.cardName}>{p.name}</h3>
-              <p className={styles.cardDesc}>{p.desc}</p>
-
-              <div className={styles.cardBottom}>
-                <div className={styles.tags}>
-                  {p.tags.map(t => (
-                    <span key={t} className={styles.tag}>{t}</span>
-                  ))}
-                </div>
-                {p.language && (
-                  <div className={styles.lang}>
-                    <span className={styles.langDot} style={{ background: langColor[p.language] }} />
-                    {p.language}
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        <motion.a
-          href="https://github.com/KpnWorld"
-          target="_blank"
-          rel="noreferrer"
-          className={styles.cta}
-          initial={{ opacity: 0, y: 16 }}
+          className={styles.graphWrap}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.15 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <FaGithub size={15} />
-          <span>See everything on GitHub — <strong>github.com/KpnWorld</strong></span>
-          <FaExternalLinkAlt size={11} className={styles.ctaArrow} />
-        </motion.a>
+          <div className={styles.graphHeader}>
+            <span className={styles.graphTitle}>Contribution Activity</span>
+            <a href={`https://github.com/${GITHUB_USER}`} target="_blank" rel="noreferrer" className={styles.graphLink}>
+              github.com/{GITHUB_USER} <FaExternalLinkAlt size={10} />
+            </a>
+          </div>
+          <div className={styles.graphInner}>
+            <img
+              src={`https://ghchart.rshah.org/5b5ef4/${GITHUB_USER}`}
+              alt="GitHub contribution graph"
+              className={styles.graphImg}
+            />
+          </div>
+        </motion.div>
       </div>
     </section>
   )
