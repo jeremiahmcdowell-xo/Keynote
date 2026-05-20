@@ -53,7 +53,7 @@ export default function Navbar({ theme, toggleTheme }) {
           className={styles.logo}
           onClick={e => scrollTo(e, 'home')}
         >
-          <span className={styles.at}>@</span>jeremiahmcodwell
+          <span className={styles.at}>@</span>jeremiahmcdowell
         </a>
 
         <div className={styles.center}>

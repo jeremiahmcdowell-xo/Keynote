@@ -12,7 +12,7 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={`section-inner ${styles.inner}`}>
         <div className={styles.left}>
-          <span className={styles.logo}><span className={styles.at}>@</span>jeremiahmcodwell</span>
+          <span className={styles.logo}><span className={styles.at}>@</span>jeremiahmcdowell</span>
           <span className={styles.copy}>
             Built with <FaHeart size={10} className={styles.heart} /> — {new Date().getFullYear()}
           </span>
