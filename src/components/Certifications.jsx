@@ -17,8 +17,8 @@ const certs = [
 const upcoming = [
   'DevOps Engineer',
   'Google UX Design Certificate',
-  'Meta Front-End Developer',
-  'freeCodeCamp — JavaScript Algorithms',
+  'CS50',
+  'CS50P',
 ]
 
 export default function Certifications() {
