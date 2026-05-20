@@ -1,13 +1,15 @@
-import { motion } from 'framer-motion'
-import { FaCertificate, FaExternalLinkAlt, FaClock } from 'react-icons/fa'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { FaCertificate, FaExternalLinkAlt, FaClock, FaTimes, FaExpand } from 'react-icons/fa'
 import styles from './Certifications.module.css'
 
 const certs = [
   {
-    name: 'Coming Soon',
-    issuer: 'Uploading certifications shortly',
-    date: '',
-    status: 'pending',
+    name: 'Certified',
+    issuer: 'Click to view certificate',
+    date: '2025',
+    status: 'earned',
+    image: '/images/cert.png',
     url: null,
   },
 ]
@@ -20,6 +22,8 @@ const upcoming = [
 ]
 
 export default function Certifications() {
+  const [lightbox, setLightbox] = useState(null)
+
   return (
     <section className={styles.section} id="certifications">
       <div className="section-inner">
@@ -42,43 +46,58 @@ export default function Certifications() {
           >
             <h2 className={styles.title}>Credentials &amp; Learning</h2>
             <p className={styles.subtitle}>
-              Certifications I've earned and am working toward.
-              Assets uploading soon.
+              Certifications earned and what I'm working toward next.
             </p>
           </motion.div>
         </div>
 
-        <div className={styles.grid}>
+        {/* Earned certs */}
+        <div className={styles.certGrid}>
           {certs.map((cert, i) => (
             <motion.div
               key={cert.name}
-              className={`${styles.certCard} ${cert.status === 'pending' ? styles.pending : ''}`}
+              className={styles.certCard}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.07, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{ y: -3 }}
+              whileHover={{ y: -4 }}
+              onClick={() => cert.image && setLightbox(cert)}
             >
-              <div className={styles.certTop}>
-                <div className={styles.certIcon}>
-                  {cert.status === 'pending'
-                    ? <FaClock size={16} />
-                    : <FaCertificate size={16} />
-                  }
+              {cert.image && (
+                <div className={styles.certImgWrap}>
+                  <img src={cert.image} alt={cert.name} className={styles.certImg} />
+                  <div className={styles.certImgOverlay}>
+                    <FaExpand size={16} />
+                  </div>
                 </div>
-                {cert.url && (
-                  <a href={cert.url} target="_blank" rel="noreferrer" className={styles.certLink}>
-                    <FaExternalLinkAlt size={11} />
-                  </a>
-                )}
+              )}
+              <div className={styles.certBody}>
+                <div className={styles.certTop}>
+                  <div className={styles.certIcon}>
+                    <FaCertificate size={14} />
+                  </div>
+                  {cert.url && (
+                    <a
+                      href={cert.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={styles.certLink}
+                      onClick={e => e.stopPropagation()}
+                    >
+                      <FaExternalLinkAlt size={11} />
+                    </a>
+                  )}
+                </div>
+                <div className={styles.certName}>{cert.name}</div>
+                <div className={styles.certIssuer}>{cert.issuer}</div>
+                {cert.date && <div className={styles.certDate}>{cert.date}</div>}
               </div>
-              <div className={styles.certName}>{cert.name}</div>
-              <div className={styles.certIssuer}>{cert.issuer}</div>
-              {cert.date && <div className={styles.certDate}>{cert.date}</div>}
             </motion.div>
           ))}
         </div>
 
+        {/* Working toward */}
         <motion.div
           className={styles.upcoming}
           initial={{ opacity: 0, y: 20 }}
@@ -97,6 +116,38 @@ export default function Certifications() {
           </div>
         </motion.div>
       </div>
+
+      {/* Lightbox */}
+      <AnimatePresence>
+        {lightbox && (
+          <motion.div
+            className={styles.lightboxBackdrop}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setLightbox(null)}
+          >
+            <motion.div
+              className={styles.lightboxContent}
+              initial={{ opacity: 0, scale: 0.92, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 20 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              onClick={e => e.stopPropagation()}
+            >
+              <button className={styles.lightboxClose} onClick={() => setLightbox(null)}>
+                <FaTimes size={14} />
+              </button>
+              <img src={lightbox.image} alt={lightbox.name} className={styles.lightboxImg} />
+              <div className={styles.lightboxCaption}>
+                <span className={styles.lightboxName}>{lightbox.name}</span>
+                {lightbox.date && <span className={styles.lightboxDate}>{lightbox.date}</span>}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }
