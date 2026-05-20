@@ -16,18 +16,38 @@ export default function Contact() {
 
   const set = (k, v) => setFields(f => ({ ...f, [k]: v }))
 
-  const handleSubmit = e => {
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState(null)
+
+  const handleSubmit = async e => {
     e.preventDefault()
-    const subject = encodeURIComponent(`Portfolio contact from ${fields.name}`)
-    const body = encodeURIComponent(
-      `Name: ${fields.name}\nEmail: ${fields.email}\n\n${fields.message}`
-    )
-    window.location.href = `mailto:jeremiahmcdowell874@gmail.com,og.devworld@gmail.com,og.gameworld@gmail.com?subject=${subject}&body=${body}`
-    setSent(true)
-    setTimeout(() => {
-      setSent(false)
-      setFields({ name: '', email: '', message: '' })
-    }, 3000)
+    setSending(true)
+    setError(null)
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: 'd75542a7-8364-4d41-8822-6f3d072dc3bb',
+          subject: `Portfolio contact from ${fields.name}`,
+          from_name: fields.name,
+          replyto: fields.email,
+          message: fields.message,
+        }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setSent(true)
+        setFields({ name: '', email: '', message: '' })
+        setTimeout(() => setSent(false), 4000)
+      } else {
+        setError('Something went wrong. Please try again.')
+      }
+    } catch {
+      setError('Network error. Please try again.')
+    } finally {
+      setSending(false)
+    }
   }
 
   const valid = fields.name.trim() && fields.email.trim() && fields.message.trim()
@@ -127,12 +147,16 @@ export default function Contact() {
                 />
               </div>
 
+              {error && (
+                <p className={styles.errorMsg}>{error}</p>
+              )}
+
               <motion.button
                 type="submit"
                 className={`${styles.submitBtn} ${sent ? styles.sentBtn : ''}`}
-                disabled={!valid || sent}
-                whileHover={valid && !sent ? { scale: 1.02 } : {}}
-                whileTap={valid && !sent ? { scale: 0.97 } : {}}
+                disabled={!valid || sent || sending}
+                whileHover={valid && !sent && !sending ? { scale: 1.02 } : {}}
+                whileTap={valid && !sent && !sending ? { scale: 0.97 } : {}}
               >
                 <AnimatePresence mode="wait">
                   {sent ? (
@@ -144,7 +168,18 @@ export default function Contact() {
                       exit={{ opacity: 0, y: -8 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <FaCheck size={13} /> Sent!
+                      <FaCheck size={13} /> Message sent!
+                    </motion.span>
+                  ) : sending ? (
+                    <motion.span
+                      key="sending"
+                      className={styles.btnInner}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <span className={styles.spinner} /> Sending…
                     </motion.span>
                   ) : (
                     <motion.span
