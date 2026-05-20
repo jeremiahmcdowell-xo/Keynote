@@ -9,6 +9,7 @@ const links = [
   { label: 'Vision', id: 'vision' },
   { label: 'Certifications', id: 'certifications' },
   { label: 'Projects', id: 'projects' },
+  { label: 'Contact', id: 'contact' },
 ]
 
 export default function Navbar({ theme, toggleTheme }) {

@@ -6,6 +6,7 @@ import About from './components/About'
 import Vision from './components/Vision'
 import Certifications from './components/Certifications'
 import Projects from './components/Projects'
+import Contact from './components/Contact'
 import Footer from './components/Footer'
 
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
         <Vision />
         <Certifications />
         <Projects />
+        <Contact />
       </main>
       <Footer />
     </>
