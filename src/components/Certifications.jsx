@@ -9,7 +9,7 @@ const certs = [
     issuer: 'Click to view certificate',
     date: '2025',
     status: 'earned',
-    image: '/images/cert.png',
+    image: `${import.meta.env.BASE_URL}images/cert.png`,
     url: null,
   },
 ]
