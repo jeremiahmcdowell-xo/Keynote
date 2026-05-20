@@ -22,7 +22,7 @@ export default function Contact() {
     const body = encodeURIComponent(
       `Name: ${fields.name}\nEmail: ${fields.email}\n\n${fields.message}`
     )
-    window.location.href = `mailto:jeremiahmcodwell@gmail.com?subject=${subject}&body=${body}`
+    window.location.href = `mailto:jeremiahmcdowell874@gmail.com,og.devworld@gmail.com,og.gameworld@gmail.com?subject=${subject}&body=${body}`
     setSent(true)
     setTimeout(() => {
       setSent(false)
