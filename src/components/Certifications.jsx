@@ -15,7 +15,7 @@ const certs = [
 ]
 
 const upcoming = [
-  'AWS Cloud Practitioner',
+  'DevOps Engineer',
   'Google UX Design Certificate',
   'Meta Front-End Developer',
   'freeCodeCamp — JavaScript Algorithms',
